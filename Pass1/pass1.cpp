@@ -49,7 +49,10 @@ class p1 {
 			strcpy(cbuff, line.c_str());
 
 			// Checks for comment line
-			if(cbuff[0] == '.') continue;
+			if(cbuff[0] == '.'){
+				output_file << line << endl;
+				continue;
+			}
 
 			// Copies to str (char pointer), tokenizes into LABEL, MNEMONIC, OPERAND
 			str = strdup (cbuff);
@@ -65,7 +68,7 @@ class p1 {
 			{
 				// Stores initial location
 				locctr = strtol(tokens[2], NULL, 16);
-				output_file << line << endl;
+				output_file <<"\t" << line << endl;
 				continue;
 			}
 
@@ -73,8 +76,8 @@ class p1 {
 					// Converts location to hex
 					sprintf(hex_loc, "%X", locctr);
 					sym_file << tokens[1] <<"\t" << hex_loc << endl;
-					output_file << hex_loc << "\t" << tokens[1]<< endl;
-					break;
+					output_file << hex_loc << "\t\t" << tokens[1]<< endl;
+					continue;
 			}
 
 			// Checks if MNEMONIC exits in optab
@@ -86,7 +89,7 @@ class p1 {
 
 			// Writes line to output file with location
 			sprintf(hex_loc, "%X", locctr);
-			output_file << hex_loc<< "\t"<< tokens[1]<< "\t"<< tokens[2]<< endl;
+			output_file << hex_loc<< "\t"<< tokens[0] <<"\t"<< tokens[1]<< "\t"<< tokens[2]<< endl;
 
 			// If symbol in LABEL field, write to symtab with hex location
 			if(strlen(tokens[0])!=0)
