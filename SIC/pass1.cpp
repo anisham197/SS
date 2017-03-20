@@ -16,18 +16,21 @@ class p1 {
 	public:
 
 	// Reading optab.txt and creating hashmap of symbol and opcode
-	void readOptab() {
+	void readOptab() 
+	{
 
 		fstream file;
 		string input1, input2;
 
 		file.open("optab3.txt", ios::in );
-		while (  file >> input1 >> input2 ) {
+		while (  file >> input1 >> input2 ) 
+		{
 			optab.insert ( make_pair ( input1 , input2 ) ) ;
 		}
 	}
 
-	void parseInput() {
+	void parseInput() 
+	{
 
 		int locctr = 0, lineno = 0;
 		fstream input_file, sym_file, output_file;
@@ -49,11 +52,13 @@ class p1 {
 			strcpy(cbuff, line.c_str());
 
 			// Checks for comment line
-			if(cbuff[0] == '.'){
+			if(cbuff[0] == '.')
+			{
 				output_file << line << endl;
 				continue;
 			}
 
+			// Clears all the tokens
 			for ( int i = 0; i < 3; i++)
 				memset(&tokens[i], 0, sizeof(tokens[i]));
 
@@ -61,7 +66,8 @@ class p1 {
 			str = strdup (cbuff);
 			int i = 0;
 			// Splits by "\t" delimiter
-			while((token = strsep(&str, "\t")) && i < 3) {
+			while((token = strsep(&str, "\t")) && i < 3) 
+			{
 					strcpy(tokens[i],token);
 					i++;
 			}
@@ -75,7 +81,8 @@ class p1 {
 				continue;
 			}
 
-			else if (strcmp(tokens[1],"END") == 0){
+			else if (strcmp(tokens[1],"END") == 0)
+			{
 					// Converts location to hex
 					sprintf(hex_loc, "%X", locctr);
 					sym_file << tokens[1] <<"\t" << hex_loc << endl;
@@ -157,7 +164,8 @@ class p1 {
 	}
 };
 
-int main () {
+int main () 
+{
 	p1 obj;
 	obj.readOptab();
 	obj.parseInput();
