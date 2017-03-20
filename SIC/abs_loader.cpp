@@ -23,7 +23,7 @@ class p1 {
 		// Read input file till end
 		while ( getline(input_file, line) )
 		{
-			// Clears cbuff from previous input      			
+			// Clears cbuff from previous input
 			memset(&cbuff, 0, sizeof(cbuff));
 
 			// Copies input line to cbuff(char array)
