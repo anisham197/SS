@@ -7,7 +7,7 @@
 using namespace std;
 
 /* File does not have length of text record before bit mask,
-File has only 3 byte object codes */
+File has only 3 byte object codes, no space separated object program */
 
 class p1 {
 
@@ -33,7 +33,7 @@ class p1 {
 		input_file.open("load_input.txt", ios::in );
 		output_file.open("reloc_loader_output.txt", ios::out | ios::app);
 
-		// Convert new starting address to int            		
+		// Convert new starting address to int
 		new_loc = strtol(new_addr.c_str(), NULL, 16);
 
 		// Read input file till end
@@ -42,7 +42,7 @@ class p1 {
 
       			// Checks for header record
       			if(line[0] == 'H'){
-				
+
 				// Retrieves old starting address
 				old_addr = line.substr(9,4);
       				old_loc = strtol(old_addr.c_str(), NULL, 16);
@@ -60,15 +60,15 @@ class p1 {
       			trec_addr = line.substr(3,4);
       			trec_loc = strtol(trec_addr.c_str(), NULL, 16);
 
-			
 
-			//  Calculate new locaton properly          		
+
+			//  Calculate new locaton properly
 			new_trec_loc = trec_loc + inc ;
 
 			// Identifies bitmask, converts to binary
             		bitmask = line.substr(7, 3);
             		bm = strtol(bitmask.c_str(), NULL, 16);
-            		binary = bitset<12>(bm).to_string(); 
+            		binary = bitset<12>(bm).to_string();
 
 
 			// Iterates through object code bytes of text record

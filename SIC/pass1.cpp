@@ -1,10 +1,8 @@
 #include <iostream>
-#include <sstream>
 #include <fstream>
 #include <cstring>
 #include <map>
 #include <stdlib.h>
-#include <stdio.h>
 
 using namespace std;
 
