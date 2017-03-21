@@ -186,7 +186,7 @@ class p1 {
 				// Checks for WORD and stores operand as hex
 				else if (strcmp(tokens[2],"WORD") == 0)
 				{
-					hexno = strtol(tokens[3], NULL, 10);
+					hexno = strtol(tokens[3], NULL, 16);
 					sprintf(instruction,"%06X",hexno);
 					interm_file << instruction << endl;
 				}

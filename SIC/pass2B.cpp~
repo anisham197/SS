@@ -8,8 +8,6 @@
 
 using namespace std;
 
-/* Does not handle byte object code correctly */
-
 class p1 {
 
 	fstream input_file, output_file;
