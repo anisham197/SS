@@ -99,7 +99,7 @@ class p1 {
 
                 		}
 
-				// Increment location and bit mask index
+				// Increment addr location and bit mask location
           			new_trec_loc = new_trec_loc + 3;
                 		count++;
       			}
