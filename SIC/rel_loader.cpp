@@ -9,108 +9,92 @@ using namespace std;
 /* File does not have length of text record before bit mask,
 File has only 3 byte object codes, no space separated object program */
 
-class p1 {
+void parseInput()
+{
 
- 	string new_addr;
+	fstream input_file, output_file;
+	string line, old_addr, new_addr, trec_addr, bitmask, binary;
+	char hex_loc[4], hex_opcode[7];
+	int old_loc, bm, inc, new_loc, trec_loc, new_trec_loc;
 
-	public:
+	// Open files
+	input_file.open("load_input.txt", ios::in );
+	output_file.open("reloc_output.txt", ios::out);
 
-  	void enterAddr()
-  	{
-    		cout << "Enter the actual starting address" << endl;
-    		cin >> new_addr;
-  	}
+	cout << "Enter the actual starting address" << endl;
+	cin >> new_addr;
 
-	void parseInput()
+	// Convert new starting address to int
+	new_loc = strtol(new_addr.c_str(), NULL, 16);
+
+	// Read input file till end
+	while ( getline(input_file, line) )
 	{
+		// Checks for header record
+		if(line[0] == 'H'){
 
-		fstream input_file, output_file;
-		string line, old_addr, trec_addr, bitmask, binary;
-		char hex_loc[4], hex_opcode[7];
-    		int old_loc, bm, inc, new_loc, trec_loc, new_trec_loc;
+			// Retrieves old starting address
+			old_addr = line.substr(9,4);
+			old_loc = strtol(old_addr.c_str(), NULL, 16);
 
-		// Open files
-		input_file.open("load_input.txt", ios::in );
-		output_file.open("reloc_loader_output.txt", ios::out | ios::app);
+			// Calculates value to incr/decr each location by
+			inc = new_loc - old_loc;
+			continue;
+		}
 
-		// Convert new starting address to int
-		new_loc = strtol(new_addr.c_str(), NULL, 16);
+		// Checks for end record
+		if ( line[0] == 'E')
+			break;
 
-		// Read input file till end
-		while ( getline(input_file, line) )
+		// Retrieves starting address from text record, converts to int
+		trec_addr = line.substr(3,4);
+		trec_loc = strtol(trec_addr.c_str(), NULL, 16);
+
+		//  Calculate new locaton properly
+		new_trec_loc = trec_loc + inc ;
+
+		// Identifies bitmask, converts to binary
+    		bitmask = line.substr(7, 3);
+    		bm = strtol(bitmask.c_str(), NULL, 16);
+    		binary = bitset<12>(bm).to_string();
+
+		// Iterates through object code bytes of text record
+    		int count = 0;
+    		int i;
+		for ( i = 10; line[i] != '\0'; i = i+6 )
 		{
+			// Converts location to hex
+        		sprintf(hex_loc, "%X", new_trec_loc);
 
-      			// Checks for header record
-      			if(line[0] == 'H'){
+			// If bitmask 0 for objectcode, print as it is with new location
+        		if ( binary[count] == '0' )
+        		{
+            			output_file << hex_loc <<"\t" << line.substr(i,6)<<endl;
+        		}
 
-				// Retrieves old starting address
-				old_addr = line.substr(9,4);
-      				old_loc = strtol(old_addr.c_str(), NULL, 16);
+        		else
+        		{
+				// Obtain object code to modify
+               			string temp = line.substr(i,6);
 
-				// Calculates value to incr/decr each location by
-				inc = new_loc - old_loc;
-        			continue;
-			}
+          			int temp_opcode = strtol(temp.c_str(), NULL, 16);
+          			temp_opcode += inc;
 
-			// Checks for end record
-      			if ( line[0] == 'E')
-        			break;
+				// Convert modified object code to hex
+          			sprintf(hex_opcode, "%X", temp_opcode);
+          			output_file << hex_loc <<"\t" << hex_opcode << endl;
 
-			// Retrieves starting address from text record, converts to int
-      			trec_addr = line.substr(3,4);
-      			trec_loc = strtol(trec_addr.c_str(), NULL, 16);
+        		}
 
+			// Increment location and bit mask index
+  			new_trec_loc = new_trec_loc + 3;
+        		count++;
+		}
 
-
-			//  Calculate new locaton properly
-			new_trec_loc = trec_loc + inc ;
-
-			// Identifies bitmask, converts to binary
-            		bitmask = line.substr(7, 3);
-            		bm = strtol(bitmask.c_str(), NULL, 16);
-            		binary = bitset<12>(bm).to_string();
-
-
-			// Iterates through object code bytes of text record
-            		int count = 0;
-            		int i;
-      			for ( i = 10; line[i] != '\0'; i = i+6 )
-      			{
-				// Converts location to hex
-                		sprintf(hex_loc, "%X", new_trec_loc);
-
-				// If bitmask 0 for objectcode, print as it is with new location
-                		if ( binary[count] == '0' )
-                		{
-                    			output_file << hex_loc <<"\t" << line.substr(i,6)<<endl;
-                		}
-
-                		else
-                		{
-					// Obtain object code to modify
-                       			string temp = line.substr(i,6);
-
-                  			int temp_opcode = strtol(temp.c_str(), NULL, 16);
-                  			temp_opcode += inc;
-
-					// Convert modified object code to hex
-                  			sprintf(hex_opcode, "%X", temp_opcode);
-                  			output_file << hex_loc <<"\t" << hex_opcode << endl;
-
-                		}
-
-				// Increment location and bit mask index
-          			new_trec_loc = new_trec_loc + 3;
-                		count++;
-      			}
-
-    		}
-  	}
-};
+	}
+}
 
 int main ()
 {
-	p1 obj;
-  	obj.enterAddr();
-	obj.parseInput();
+	parseInput();
 }
