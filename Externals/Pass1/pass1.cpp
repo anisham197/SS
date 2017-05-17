@@ -3,6 +3,7 @@
 #include<sstream>
 #include<string>
 #include<map>
+#include<iomanip>
 using namespace std;
 
 map <string, string> optab;
@@ -60,7 +61,7 @@ void parseInput()
 
     else if(opcode == "END")
     {
-      output_file << uppercase << hex << locctr << "\t"<< line << endl;
+      output_file <<setfill('0')<<setw(4) << uppercase << hex << locctr << "\t"<< line << endl;
       continue;
     }
 
@@ -72,7 +73,7 @@ void parseInput()
 		}
 
     // Writes line to output file with location
-    output_file << uppercase << hex << locctr <<"\t"<< line << endl;
+    output_file <<setfill('0')<<setw(4)<< uppercase << hex << locctr <<"\t"<< line << endl;
 
     //check whether label is present
     if(label.size() != 0)
@@ -81,7 +82,7 @@ void parseInput()
         {
             //not found, so insert
             stringstream s;
-            s << uppercase << hex << locctr;
+            s <<setfill('0')<<setw(4) << uppercase << hex << locctr;
             symtab[label] = s.str();
         }
         else

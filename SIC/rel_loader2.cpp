@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>  
+#include <sstream>
 #include <cstring>
 #include <stdlib.h>
 #include <bitset>
@@ -13,9 +13,9 @@ void parse_src()
 
     fstream input_file,output_file;
     string line,temp;
-    
+
     unsigned int newstart = 0,oldstart = 0,addr,opcode, inc,bmask;
-    
+
     //get new start address
     cout << "Enter the actual starting address" << endl;
     cin >>hex>>newstart;
@@ -29,7 +29,7 @@ void parse_src()
        stringstream tokens; //stringstream for tokenisation
        addr = 0;
        tokens<<line; //add line to string stream
-	
+
        if(line[0] == 'H'){
             tokens>>temp>>temp; //read H and PROG name to temp
             tokens>>hex>>oldstart;  //Read original start address
@@ -62,7 +62,7 @@ void parse_src()
                 hexdigit<<hex<<opcode;
 		int len = hexdigit.str().length();
                 addr+= (len % 2 == 0 ) ? len/2 : (len+1)/2;
-                
+
                 bmask= bmask<<1;//shift bitmask by 1 for next opcode
             }
         }
@@ -77,4 +77,3 @@ int main()
 {
     parse_src();
 }
-
