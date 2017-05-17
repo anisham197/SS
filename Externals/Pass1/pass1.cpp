@@ -6,8 +6,7 @@
 #include<iomanip>
 using namespace std;
 
-map <string, string> optab;
-map <string, string> symtab;
+map <string, string> optab, symtab;
 map<string,string>::iterator iter;
 
 // Reading optab.txt and creating hashmap of symbol and opcode
@@ -38,10 +37,6 @@ void parseInput()
 	// Read input file till end
 	while ( getline(input_file, line) )
 	{
-    stringstream s(line);
-    getline(s, label, '\t');
-    getline(s, opcode, '\t');
-    getline(s, operand, '\n');
     lineno++;
 
     // Checks for comment line
@@ -50,6 +45,11 @@ void parseInput()
         output_file << line << endl;
         continue;
     }
+
+		stringstream s(line);
+		getline(s, label, '\t');
+		getline(s, opcode, '\t');
+		getline(s, operand, '\n');
 
     if(opcode == "START")
     {
@@ -153,8 +153,6 @@ void parseInput()
 void writeSymtab()
 {
     fstream file;
-    map<string,string>::iterator iter;
-
     file.open("symtab.txt", ios::out);
     for( iter = symtab.begin(); iter != symtab.end(); iter++)
         file << iter->first << "\t" << iter->second << endl;
